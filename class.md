@@ -173,6 +173,30 @@ the `#box` variable is associated with the input element itself
 
 
 ## forms
+cookbook-style chapter
+
+`[()]` syntax combines `[]` binding and `()` event binding
+* `[(ngModel)]` can be split into both parts
+
+```
+	<input type="text" class="form-control" id="name"
+		   required
+		   [ngModel]="model.name" name="name"
+		   (ngModelChange)="model.name = $event" >
+```
+
+`ngModelChange` is an angular event emitter, not a DOM event
+* it returns the value of the input box
+
+## dependency injection
+a coding pattern where a class receives dependencies rather than creating them
+* if a class depends on an instance of another, it should accept an instance
+  in a constructor as a parameter rather than creating an instance itself
+
+angular has its own dependency injection framework
+* because why not
+* `let car = injector.get(Car);`
+* it can actually be used as a standalone product for other projects
 
 topics
 ======
