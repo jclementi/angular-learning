@@ -104,6 +104,76 @@ services added to the root module will be available everywhere
   get new instances of the service
 
 
+## the root module
+
+the root module defines how everything is put together
+metadata contains three essential components
+* imports - at least contains the `BrowserModule`
+* declarations - a component to run
+* bootstrap - the root component angular creates and inserts into `index.html`
+
+### imports
+the imports array contains all the modules used by the application
+these should be only `NgModule` classes
+javascript imports give access to symbols exported by other js modules
+angular imports tell angular about angular modules (classes with `@NgModule`)
+
+### declarations
+lists every component that belongs to the app
+only components are allowed
+module classes are not allowed, nor serivces nor model classes
+
+### bootstrap
+'bootstrapping' creates the component listed in the bootstrap array
+it inserts each created component into the dom
+applications usually bootstrap only the single root component
+
+bootstrapping usually occurs with a JiT compiler during development
+other methods of bootstrapping are used with production environments
+
+`platformBrowserDynamic().bootstrapModule(AppModule)`
+* takes the `AppComponent` component from `AppModule`'s bootstrap array
+* sets up `AppComponent` in the dom tag identified by by the component's selector
+
+
+## displaying data
+
+### interpolation
+`{{ }}` takes properties from the component and interpolates them into the template
+`*ngFor` can repeat a tag for any iterable object in the component
+this stuff was covered in the tutorial
+`*ngIf`, whatever
+
+
+## user input
+
+### binding to events
+like this
+`<button (click)="onClickMe()">click me</button>`
+* `(click)` identifies the 'target' of the binding
+* `onClickMe()` is the 'template statement' evaluated when the event fires
+ * these statements are evaluated from within the context of their component
+
+angular puts the event object into a special varible called `$event`
+* `<input (keyup)="onKey($event)">`
+
+### template reference variables
+provide direct access to an element from within the template
+
+```
+	<input #box (keyup)="0">
+	<p>{{box.value}}</p>
+```
+
+the `#box` variable is associated with the input element itself
+* `box.value` gets the value of the input element
+* angular will only update the `box` variable when it evaluates the tag
+* evaluating the tag only occurs because `(keyup)` tells it to listen for events
+* the 'template statement' `="0"` does nothing, but it's still necessary
+
+
+## forms
+
 topics
 ======
 * strengths
