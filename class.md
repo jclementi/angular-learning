@@ -198,6 +198,119 @@ angular has its own dependency injection framework
 * `let car = injector.get(Car);`
 * it can actually be used as a standalone product for other projects
 
+configure angular's injector by registering your service providers
+* registration can happen either in `NgModule` or in application components
+
+any registered providers are available to that component and all children
+angular creates any necessary injectors when it creates components
+injectors can be created manually if needed
+
+dependencies are singletons within the scope of an injector
+services are reused within the scope for every component that needs it
+you can still create two of a service by registering it twice (you shouldn't)
+
+```
+	providers: [
+		NewLogger,
+		{ provide: OldLogger, useClass NewLogger }
+	] // this creates two instances of NewLogger
+
+	providers: [
+		NewLogger,
+		{ provide: OldLogger, useExisting: NewLogger }
+	] // uses the existing NewLogger class instead of creating one
+```
+
+the `@Injectable()` decorator marks a service available for injection
+angular looks for this injectable service in component constructor parameters
+
+the metadata produced by the typescript transpiler is essential to injection
+* using any decorator ensures that metadata for that class is available
+* there's nothing special about `@Injectable()`(?)
+* `@Directive`, `@Pipe`, and `@Component` are subtypes of `@Injectable()`
+* `@Injectable()` is rarely needed, but it can make things clearer
+
+can provide an object as a provider directly, instead of a class to instantiate
+
+```
+	providers: [
+		NewLogger,
+		{ provide: OldLogger, useValue: LoggingObject }
+	]
+```
+
+can use factory methods, spelling out dependencies for the method
+this is complicated, but effective
+```
+	export let heroServiceProvider = {
+		provide: HeroService,
+		useFactory: heroServiceFactory,
+		deps: [Logger, UserService]
+	};
+```
+
+the tokens that the dependency injector uses are keys to a map of dependencies
+when dependencies are class instances, classnames can serve as tokens
+when dependencies are not classes, we have to get creative about the tokens used
+use `OpaqueToken` to assign a token to a dependency
+
+use `@Optional()` to tell angular a dependency is not required
+* angular may set it to null if it wants
+
+
+## template syntax
+`{{ }}` takes template expressions, which are javascript without side-effects
+execution context for template expressions is the component
+
+event binding is done with 'template statements'
+these statements are almost javascript
+context for template statements is also the component
+
+html attributes are different than dom properties
+* properties change, attributes don't
+angular binds to properties
+attributes only serve to initialize values
+
+`<button [disabled]="isUnchanged">disabled</button>`
+this binds to the `disabled` property
+binding to the attribute would do nothing when it changed
+binding to the property changes the state of the button
+
+use `[attr.<attribute>]=<template expression>` to bind to attributes
+add and remove css classes with the class binding
+`<div [class.special]="isSpecial">adds special class if "isSpecial" is truthy...`
+use `NgClass` directive to manage css classes in general cases
+use `NgStyle` directive for styles
+
+### event binding
+`<button (click)="onSave()">Save</button>`
+information about the event is held in `$event`
+* contents are determined by the type of the event
+* regular dom events make `$event` a regular dom event object
+
+create custom events using `EventEmitter` in a directive (component)
+
+```
+	deleteRequest = new EventEmitter<Hero>();
+	delete() {
+		this.deleteRequest.emit(this.hero);
+	}
+```
+
+angular provides a lot of directives to help with common tasks
+`ngModel` to bind to certain html elements, such as `<input>`
+* `<input [(ngModel)]="currenthero.firstName">`
+`NgClass` to set multiple classes for an element
+* `<div [ngClass]="setClasses()">...</div>`
+`NgStyle` to set multiple in-line styles
+`ngIf` to conditionally remove things from the dom
+`ngSwitch` to c-style switch in tags
+`ngFor` to repeat html elements for iterables in the component
+
+questions
+=========
+what determines component parent-child hierarchy?
+
 topics
 ======
 * strengths
