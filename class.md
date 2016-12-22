@@ -1,4 +1,4 @@
-angular class
+
 =============
 
 learning notes
@@ -313,7 +313,37 @@ what determines component parent-child hierarchy?
 
 topics
 ======
-* strengths
+### overview
 * ideal uses
+* strengths
 * adoption
+
+### how to use it / structure
+* modules are the building blocks
+ * correspond to features
+* components hold logic that drives views
+ * regular javascript class, decorated
+* templates contain view, binding info
+ * tied to components via component metadata
+ * most features of template languages are there
+  * looping, data binding, conditional display
+
+
+### behind the scenes
+* javascript imports exports vs angular imports exports
+* decorators
+* method of change detection
+* zones
+
+### braintree
+* working with braintree
+ * basic running
+ * binding to valid state
+
+slides
+======
+
+
+
+
 
